@@ -1,26 +1,48 @@
 {
-  "teachers": [
-    {
-      "id": "science",
-      "name": "과학 선생님",
-      "subject": "과학",
-      "personality": "",
-      "speaking_style": "",
-      "teaching_style": "",
-      "values": [],
-      "specialties": [],
-      "system_prompt": ""
-    },
-    {
-      "id": "information",
-      "name": "정보 선생님",
-      "subject": "정보",
-      "personality": "",
-      "speaking_style": "",
-      "teaching_style": "",
-      "values": [],
-      "specialties": [],
-      "system_prompt": ""
-    }
-  ]
+    "teachers": [
+        {
+            "id": "science",
+            "name": "과학 선생님",
+            "subject": "과학",
+            "personality": "",
+            "speaking_style": "",
+            "teaching_style": "",
+            "values": [],
+            "specialties": [],
+            "system_prompt": ""
+        },
+        {
+            "id": "information",
+            "name": "정보 선생님",
+            "subject": "정보",
+            "personality": "",
+            "speaking_style": "",
+            "teaching_style": "",
+            "values": [],
+            "specialties": [],
+            "system_prompt": ""
+        },
+        {
+            "id": "string",
+            "name": "string",
+            "subject": "string",
+            "personality": "",
+            "speaking_style": "",
+            "teaching_style": "",
+            "values": [],
+            "specialties": [],
+            "system_prompt": ""
+        },
+        {
+            "id": "english",
+            "name": "string",
+            "subject": "string",
+            "personality": "",
+            "speaking_style": "",
+            "teaching_style": "",
+            "values": [],
+            "specialties": [],
+            "system_prompt": ""
+        }
+    ]
 }

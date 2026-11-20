@@ -3,7 +3,15 @@ from datetime import date, timedelta
 import requests
 
 from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 
+from app.services.teacher_service import (
+    load_teachers,
+    get_teacher,
+    add_teacher,
+    update_teacher,
+    create_teacher_prompt
+)
 from app.services.memory_service import (
     get_history,
     add_history,
@@ -34,6 +42,17 @@ app = FastAPI(
     description="NEIS API와 Qwen을 활용한 학교 정보 챗봇",
     version="1.0.0"
 )
+# 선생님 등록 및 수정에 사용할 데이터 구조
+class TeacherRequest(BaseModel):
+    id: str
+    name: str
+    subject: str
+    personality: str = ""
+    speaking_style: str = ""
+    teaching_style: str = ""
+    values: list[str] = []
+    specialties: list[str] = []
+    system_prompt: str = ""
 
 
 # 메인 페이지
@@ -49,6 +68,59 @@ def home():
 def health_check():
     return {"status": "ok"}
 
+# 전체 선생님 목록 조회
+@app.get("/teachers")
+def teacher_list():
+    return {
+        "teachers": load_teachers()
+    }
+# 새로운 선생님 등록
+@app.post("/teachers")
+def register_teacher(teacher: TeacherRequest):
+    try:
+        return add_teacher(teacher.model_dump())
+
+    except ValueError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+
+# 기존 선생님 정보 수정
+@app.put("/teachers/{teacher_id}")
+def edit_teacher(teacher_id: str, teacher: TeacherRequest):
+    try:
+        updated_data = teacher.model_dump(exclude={"id"})
+        return update_teacher(teacher_id, updated_data)
+
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+    # 특정 선생님 정보 조회
+@app.get("/teachers/{teacher_id}")
+def teacher_detail(teacher_id: str):
+    teacher = get_teacher(teacher_id)
+
+# 특정 선생님의 AI 프롬프트 조회
+@app.get("/teachers/{teacher_id}/prompt")
+def teacher_prompt(teacher_id: str):
+    prompt = create_teacher_prompt(teacher_id)
+
+    if prompt is None:
+        raise HTTPException(
+            status_code=404,
+            detail="해당 선생님을 찾을 수 없습니다."
+        )
+
+    return {
+        "teacher_id": teacher_id,
+        "prompt": prompt
+    }
+
+    if teacher is None:
+        raise HTTPException(
+            status_code=404,
+            detail="해당 선생님을 찾을 수 없습니다."
+        )
+
+    return teacher
 
 # 학교 정보 조회
 @app.get("/school")
